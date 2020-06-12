@@ -99,4 +99,22 @@ class PostRepository implements PostRepositoryInterface
     {
         $this->getConnection()->delete($id);
     }
+
+    /**
+     * @param int $page
+     * @param int $postsByPage
+     * @return Post[]
+     */
+    public function getAllPaginated(int $page, int $postsByPage): array
+    {
+        $offset = $postsByPage * ($page - 1);
+        $result = $this->getConnection()->offset($offset)->limit($postsByPage)->get();
+        $posts = [];
+
+        foreach ($result as $post) {
+            $posts[] = new Post($post->id, $post->header, $post->content, $post->file, $post->date, $post->author_name);
+        }
+
+        return $posts;
+    }
 }
