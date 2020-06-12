@@ -22,13 +22,23 @@ class User
     private $full_name;
 
     /**
+     * @var string
+     */
+    private $phone;
+
+    /**
      * User constructor.
      * @param int $id
      * @param string $username
      * @param string $full_name
+     * @param string $phone
      */
-    public function __construct(int $id, string $username, string $full_name)
+    public function __construct(int $id, string $username, string $full_name, string $phone)
     {
+        $this->id = $id;
+        $this->username = $username;
+        $this->full_name = $full_name;
+        $this->phone = $phone;
     }
 
     /**
@@ -53,5 +63,13 @@ class User
     public function getFullName(): string
     {
         return $this->full_name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone(): string
+    {
+        return $this->phone;
     }
 }

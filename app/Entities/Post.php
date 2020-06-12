@@ -7,6 +7,13 @@ namespace App\Entities;
 class Post
 {
     /**
+     * @const string
+     */
+    private const STATUS_NEW = 'New';
+    private const STATUS_VERIFIED = 'Verified';
+    private const STATUS_INFORMATION_EXPIRED = 'Information expired';
+
+    /**
      * @var int
      */
     private $id;
@@ -45,8 +52,15 @@ class Post
      * @param string $date
      * @param string $author_name
      */
-    public function __construct(int $id, string $header, string $content, string $file, string $date, string $author_name)
+    public function __construct(int $id, string $header, string $content, string $file, string $date, string $author_name, string $status)
     {
+        $this->id = $id;
+        $this->header = $header;
+        $this->content = $content;
+        $this->file = $file;
+        $this->date = $date;
+        $this->author_name = $author_name;
+        $this->status = $status ?: self::STATUS_NEW;
     }
 
     /**
@@ -92,8 +106,22 @@ class Post
     /**
      * @return string
      */
-    public function getAuthorNmae(): string
+    public function getAuthorName(): string
     {
         return $this->author_name;
+    }
+
+    /**
+     * @event PostVerified
+     */
+    public function verify(): void
+    {
+        $this->status = self::STATUS_VERIFIED;
+        event(new PostVerified($this));
+    }
+
+    public function disable(): void
+    {
+        $this->status = self::STATUS_INFORMATION_EXPIRED;
     }
 }
